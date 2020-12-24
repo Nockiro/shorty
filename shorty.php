@@ -306,16 +306,14 @@ class Shorty {
             array_push($this->whitelist, $ip);
         }
     }
-
-    /**
-     * Starts the program.
+	
+	/**
+     * Starts the adding and showing part.
      */
-    public function run() {
-        $q = str_replace('/', '', $_GET['q']);
-
+    public function showURL() {
         $url = '';
-        if (isset($_GET['url'])) {
-          $url = urldecode($_GET['url']);
+        if (isset($_REQUEST['url'])) {
+          $url = urldecode($_REQUEST['url']);
         }
 
         $format = '';
@@ -369,27 +367,32 @@ class Shorty {
                 $this->error('Bad input.');
             }
         }
-        // Lookup by id
-        else {
-            if (empty($q)) {
-              $this->not_found();
-              return;
-            }
+    }
+	
+    /**
+     * Starts the resolving part.
+     */
+    public function resolve() {
+        $q = str_replace('/', '', $_GET['q']);
 
-            if (preg_match('/^([a-zA-Z0-9]+)$/', $q, $matches)) {
-                $id = self::decode($matches[1]);
+		if (empty($q)) {
+		  $this->not_found();
+		  return;
+		}
 
-                $result = $this->fetch($id);
+		if (preg_match('/^([a-zA-Z0-9]+)$/', $q, $matches)) {
+			$id = self::decode($matches[1]);
 
-                if (!empty($result)) {
-                    $this->update($id);
+			$result = $this->fetch($id);
 
-                    $this->redirect($result['url']);
-                }
-                else {
-                    $this->not_found();
-                }
-            }
-        }
+			if (!empty($result)) {
+				$this->update($id);
+
+				$this->redirect($result['url']);
+			}
+			else {
+				$this->not_found();
+			}
+		}
     }
 }

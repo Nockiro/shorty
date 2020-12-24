@@ -25,13 +25,17 @@ For **Nginx**, add the following to your server declaration:
         }
     }
 
-4\. Edit the `config.php` file.
+4\. Save the `config.sample.php` file as `config.php`.
 
 ## Generating short URLs
 
-To generate a short URL, simply pass in a `url` query parameter to your Shorty installation:
+To generate a short URL, simply use the form provided at `/add` ..
 
-    http://example.com/?url=http://www.google.com
+    http://example.com/add/
+	
+.. or use the direct link via query.
+
+    http://example.com/add/?url=http://www.google.com
 
 This will return a shortened URL such as:
 
@@ -52,6 +56,19 @@ By default anyone is allowed to enter a new URL for shortening. To restrict the 
 certain IP addresses, use the `allow` function:
 
     $shorty->allow('192.168.0.10');
+
+## Authentication
+
+To protect the link generation against bots or unwanted additional users, you can use a .htpasswd file to protect the entire `add/` folder.
+For the apache webserver, the .htaccess in the `add/` folder could for example look like that:
+
+
+    AuthType Basic
+    AuthName "No link generation without password"
+    AuthUserFile  /absolute/path/to/.htpasswd
+    Require valid-user
+
+
 
 ## Requirements
 
